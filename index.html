@@ -3,19 +3,21 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Document</title>
-		 
+
 </head>
 <body>
-	
+
 	<button id="btn">Рисовать!</button>
 	<input type="text" id="input">
 	<br><br>
+	<div id="app"></div>
 	<br>
 	<br>
 	<canvas id="can" width="500" height="500"></canvas>
 
 
-
+<script src="node_modules/react/dist/react.js"></script>
+<script src="node_modules/react-dom/dist/react-dom.js"></script>
 <script type="text/javascript">
 
 var canvas = document.getElementById("can");
@@ -49,7 +51,7 @@ function draw_b() {
 	context.moveTo(35,35);
 	context.lineTo(40,30);
 	context.lineTo(45,35);
-	
+
 
 	context.font = "bold 12px sans-serif";//указваем параметры текста
 	// черточки на линии у
@@ -64,10 +66,10 @@ function draw_b() {
 		context.lineTo(x,465);
 		context.fillText(xNum, x-5, 480);
 	}
-	
+
 	//for()
 	//добавляем текста
-	
+
 	context.fillText("x", 467, 475);
 	context.fillText("y", 25, 35);
 	context.fillText("0", 25, 475);
@@ -88,25 +90,30 @@ btn.addEventListener('click', function(){
 	for(let i = 0,x=80; i < array.length; i++,x+=40){
 		let heightTotal = array[i]*4;
 		let line = 0;
-		
-		
+
+
 		requestAnimationFrame(function drowLine () {
 			context.fillRect(x-3, 460, 6, line-=4);
 			context.stroke();
 		  if(line + heightTotal > 0)requestAnimationFrame(drowLine);
 		});
 		// context.fillRect(x-3, 460, 6, -array[i]*4);
-		// context.stroke();		
+		// context.stroke();
 	}
 
-	
+
 	console.log(array);
 });
 
-	
-
-
-var ball = document.getElementById('ball');
+var inputArea = React.createClass({
+	render: function(){
+		return React.DOM.input()
+	}
+	});
+ReactDOM.render(
+	React.createElement(inputArea),
+	document.getElementById('app')
+);
 
 
 </script>

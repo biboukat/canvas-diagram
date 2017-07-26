@@ -86,15 +86,17 @@ btn.addEventListener('click', function(){
 	var input = document.querySelector('#input');
 	var array = input.value.split(',');
 	context.beginPath();
-	context.fillStyle = "#ff0";
 	for(let i = 0,x=80; i < array.length; i++,x+=40){
 		let heightTotal = array[i]*4;
 		let line = 0;
 
-
 		requestAnimationFrame(function drowLine () {
+			context.fillStyle = "#0f0";
+			if(heightTotal/4 > 33) context.fillStyle = "#ff0";
+			if(heightTotal/4 > 66) context.fillStyle = "#f00";
 			context.fillRect(x-3, 460, 6, line-=4);
 			context.stroke();
+
 		  if(line + heightTotal > 0)requestAnimationFrame(drowLine);
 		});
 		// context.fillRect(x-3, 460, 6, -array[i]*4);
@@ -106,12 +108,54 @@ btn.addEventListener('click', function(){
 });
 
 var inputArea = React.createClass({
+	propTypes: {
+		//arr: React.PropTypes.number
+	},
+	getInitialState: function(){
+		return {
+			arr: this.props.arr
+		};
+	},
+	getDefaultprops: function(){
+		return {
+			arr: ''
+		};
+	},
+	_inputChange: function(e){
+		var val = e.target.value;
+		var arrVal = val.split(',');
+		
+		var currentVal = arrVal[arrVal.length-1];
+		if(!isNaN(currentVal) || !val.length || val[val.length-1] == ','){
+
+			arrVal[arrVal.length-1] = +currentVal;
+			val = arrVal.join(',');
+			if(currentVal<0){
+				arrVal[arrVal.length-1] = 1;
+				arrVal.join(',');
+
+			}
+			if(currentVal>100){
+				arrVal[arrVal.length-1] = 100;
+				val = arrVal.join(',');
+			}
+
+			this.setState({
+				arr: val
+			});
+		}
+	},
 	render: function(){
-		return React.DOM.input()
+		return React.DOM.input({
+			value: this.state.arr,
+			onChange: this._inputChange
+		});
 	}
-	});
+});
 ReactDOM.render(
-	React.createElement(inputArea),
+	React.createElement(inputArea,{
+		arr: ''
+	}),
 	document.getElementById('app')
 );
 
